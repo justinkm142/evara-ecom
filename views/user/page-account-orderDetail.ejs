@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+
+    <%- include('../partials/userHead.ejs') %>
+
+
+
+<body>
+
+    <%- include('../partials/userNav.ejs') %>
+
+
+
+
+
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/index.html" rel="nofollow">Home</a>
+        <span></span> My account
+        <span></span> Order details
+      </div>
+    </div>
+  </div>
+  <section class="mt-70 mb-60">
+    <div class="container">
+      <div class="row order-wrap mx-auto">
+        <div class="text-end mb-60">
+          <a href="/page-account.html" class="btn btn-outline btn-lg btn-brand-outline font-weight-bold text-brand bg-white text-hover-white border-radius-5 btn-shadow-brand hover-up">Back to all orders</a>
+          <a href="#" onclick="invoice('<%= invoiceList %>')" class="btn ms-2">Download invoice</a>
+        </div>
+
+      </div>
+      <div class="row order-wrap mx-auto">
+        <div class="col-4 pe-3">
+          <h4 class="mb-35 text-brand">Delivery Address</h4>
+          <div class="table-responsive">
+            <table class="table shopping-summery">
+              <tbody>
+                
+                <tr>
+                  <!-- TODO exeption if no category is found -->
+
+                  <td>Address: </td>
+                  <td><b> <%= orderList.address.name%> <br><%= orderList.address.address%> <br> <%= orderList.address.city%>
+                    <br> <%= orderList.address.state%>  - <%= orderList.address.zipCode%> </b></td>
+                </tr>
+               
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+       
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-50 mb-70">
+    <div class="container">
+      <div class="row order-wrap mx-auto">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table shopping-summery text-center">
+              <thead>
+                <tr class="main-heading">
+                  <th scope="col">Image</th>
+                  <th scope="col">Product</th>
+                  <th scope="col">Unit price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Price</th>
+                  <!-- <th scope="col">Order Status</th>
+                  <th scope="col">Payment Status</th> -->
+                  <th scope="col">Status</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <% let total=0 %>
+                <% let i=0 %>
+                <% productList.forEach(function(item){ %>
+
+                <% total=total+((item.products.quantity)*(item.productInfo.sellingPrice)) %>
+
+
+                <tr class="63688c9f9664c015d6575bf0-tr">
+                  <td class="image product-thumbnail">
+                        <img src="/uploads/<%=item.productInfo.image[0]%>" alt="#">
+                    </a>
+                  </td>
+                
+
+                  <td class="product-name"><a href="#"
+                    id="name<%=i%>" ><%= item.productInfo.name %></a></td>
+
+            
+                  <td class="product-price-cart"><span
+                    class="amount"
+                    id="amount<%=i%>"> ₹ <%= item.productInfo.sellingPrice %> </span></td>
+
+                
+
+                  <td class="product-quantity"><a href="#"
+                    id="quantity<%=i%>"><%= item.products.quantity %></a></td>
+
+
+                  <td class="price" data-title="Price">
+                    <span>₹ <%=(item.products.quantity)*(item.productInfo.sellingPrice) %></span>
+                    </td>
+
+                    <td> <%= item.products.status%>
+                        <td class="button-td">
+                    <% if(item.products.status=="Delivered"){ %>
+                       <a onclick="updateOrder('<%- item.products.productId %>','<%-i%>','<%- orderList._id%>','Return')"><h5><b style="color:red ;">Return</b></h5> </a>
+                    <% }  else if(item.products.status=="Refund")  {  %>
+                        <h5><b style="color:rgb(3, 169, 0) ;">completed</b></h5>
+                    <!-- <a onclick="del(' ')" class="btn btn-sm btn-secondary"> <i class="fi-rs-shopping-bag mr-5"></i>Cancel order</a> -->
+                    
+                    <% }  else if(item.products.status=="Cancel")  {  %>
+                        <h5><b style="color:rgb(3, 169, 0) ;">completed</b></h5>
+                    <% }  else if(item.products.status=="Return")  {  %>
+                            <h5><b style="color:rgb(3, 169, 0) ;">Awaiting Refund</b></h5>
+                    
+                        <% } else { %>
+                        <a onclick="updateOrder('<%- item.products.productId %>','<%-i%>','<%- orderList._id%>','Cancel')"><h5><b style="color:red ;">Cancel</b></h5> </a>
+                  <% }   %>
+                  </td>
+                </tr>
+
+
+                <script>
+
+                  
+                </script>
+
+                <% i=i+1 %>
+                <% }) %> 
+
+
+
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div id="snackbar">Order Updated</div>
+ 
+</main>
+
+<script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
+
+<%- include('../partials/userFooter.ejs') %>
+
+<script>
+
+function updateOrder(id,selection,orId,status){
+   
+   let data={
+       productId:id,
+       proSelection:selection,
+       newValue:status,
+       orderId:orId
+   }
+
+   $.ajax({
+       type:"PATCH",
+       url:"/admin/page-orders-detail.html",
+       dataType: "text",
+       data: data,
+       success:function (data) {
+               console.log(data)
+               var x = document.getElementById("snackbar");
+               x.className = "show";
+               setTimeout(function(){ x.className = x.className.replace("show", ""); }, 2000);
+               location.reload();
+               
+       },
+       error: function (data) {
+           alert('An error occurred.');
+           console.log(data);
+       },
+   });
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // function del(orderId,proId) {
+  //   $.ajax({
+  //     url: "/delete-order-product",
+  //     data: {
+  //       orderId,
+  //       proId
+  //     },
+  //     method: "post",
+  //     success: (response) => {
+  //       location.reload()
+  //     },
+  //   });
+  // }
+
+
+
+  function invoice(productArray) {
+    
+          console.log("button is clicked" )
+
+         let itemArray=[];
+         let arrayLength='<%= invoiceList.length %>';
+         let invoiceNumber='<%= invoiceList[0]._id %>';
+         let invoiceDate='<%= invoiceList[0].date.substring(0, 15) %>.';
+         let objectItem;
+
+         '<% for (let j=0;j<invoiceList.length;j++){ %>'
+
+          objectItem={
+            "quantity": '<%= invoiceList[j].quantity %>',
+            "description": '<%= invoiceList[j].productName %>',
+            "tax-rate": 0,           
+            "price": '<%= invoiceList[j].productPrice %>'
+          }
+          itemArray.push(objectItem)
+          ' <% } %> '
+    
+    var data = {
+
+    "customize": {
+        //  "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html 
+    },
+    "images": {
+        // The logo on top of your invoice
+        "logo": "https://i.postimg.cc/qvsPx5bB/images.png",
+        // The invoice background
+        
+    },
+    // Your own data
+    "sender": {
+        "company": "Evara Ecom ",
+        "address": "Sample Street",
+        "zip": "680001",
+        "city": "Kochi",
+        "country": "India"
+        //"custom1": "custom value 1",
+        //"custom2": "custom value 2",
+        //"custom3": "custom value 3"
+    },
+    // Your recipient
+    "client": {
+        "company": '<%- orderList.address.name%>',
+        "address": '<%- orderList.address.address%>',
+        "zip": '<%- orderList.address.zipCode%>',
+        "city": '<%- orderList.address.city%>',
+        "State": '<%- orderList.address.state%>'
+        // "custom1": "custom value 1",
+        // "custom2": "custom value 2",
+        // "custom3": "custom value 3"
+    },
+    "information": {
+        // Invoice number
+        "number": invoiceNumber,
+        // Invoice data
+        "date": invoiceDate,
+        // Invoice due date
+          "due-date": "NA"
+    },
+    // The products you would like to see on your invoice
+    // Total values are being calculated automatically
+    "products": itemArray,
+    // The message you would like to display on the bottom of your invoice
+    "bottom-notice": "Thanks to use Evara Ecom ",
+    // Settings to customize your invoice
+    "settings": {
+        "currency": "INR", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+        // "locale": "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')
+        // "tax-notation": "gst", // Defaults to 'vat'
+        // "margin-top": 25, // Defaults to '25'
+        // "margin-right": 25, // Defaults to '25'
+        // "margin-left": 25, // Defaults to '25'
+        // "margin-bottom": 25, // Defaults to '25'
+        // "format": "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+        // "height": "1000px", // allowed units: mm, cm, in, px
+        // "width": "500px", // allowed units: mm, cm, in, px
+        // "orientation": "landscape", // portrait or landscape, defaults to portrait
+    },
+    // Translate your invoice to your preferred language
+    "translate": {
+        // "invoice": "FACTUUR",  // Default to 'INVOICE'
+        // "number": "Nummer", // Defaults to 'Number'
+        // "date": "Datum", // Default to 'Date'
+        // "due-date": "Verloopdatum", // Defaults to 'Due Date'
+        // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
+        // "products": "Producten", // Defaults to 'Products'
+        // "quantity": "Aantal", // Default to 'Quantity'
+        // "price": "Prijs", // Defaults to 'Price'
+        // "product-total": "Totaal", // Defaults to 'Total'
+        // "total": "Totaal" // Defaults to 'Total'
+    },
+};
+
+
+    easyinvoice.createInvoice(data, function (result) {
+
+        // The response will contain a base64 encoded PDF file
+        easyinvoice.download('Invoice.pdf', result.pdf);
+
+        // Now this result can be used to save, download or render your invoice
+        // Please review the documentation below on how to do this
+    });
+
+
+
+
+
+
+
+                
+
+             
+
+
+               
+
+             
+
+        }
+</script>

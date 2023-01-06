@@ -1,0 +1,230 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+
+<%- include('../partials/adminHead.ejs') %>
+
+<body>
+    
+    <%- include('../partials/adminNav.ejs') %>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Banner </h2>
+                    <p>Add or delete Banner</p>
+                </div>
+                <div>
+                    <input type="text" placeholder="Search Categories" class="form-control bg-white">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+
+
+                            <form action="/admin/page-banner.html" method="post" id="catform" enctype="multipart/form-data">
+                                <div class="mb-4">
+                                    <label for="h1text" class="form-label" >H1</label>
+                                    <input type="text" name="h1text" placeholder="Type here" class="form-control" id="h1text" />
+
+                                    <label for="h2text" class="form-label" >H2</label>
+                                    <input type="text" name="h2text" placeholder="Type here" class="form-control" id="h2text" />
+                                   
+                                    <label for="h3text" class="form-label" >H3</label>
+                                    <input type="text" name="h3text" placeholder="Type here" class="form-control" id="h3text" />
+
+                                    <label for="Offer" class="form-label" >Offer</label>
+                                    <input type="text" name="offer" placeholder="Type here" class="form-control" id="Offer" />
+                                   
+                                    <label for="start_date" class="form-label" >Start Date</label>
+                                    <input type="date" name="startDate" placeholder="Type here" class="form-control" id="start_date" />
+                                   
+                                    <label for="end_date" class="form-label" >End Date</label>
+                                    <input type="date" name="endDate" placeholder="Type here" class="form-control" id="end_date" />
+                                   
+                                   
+                                    <label class="form-label">Images</label>
+                                    <input name="image" class="form-control" type="file" multiple>
+                                    <!-- <label for="typeOfCoupon" class="form-label" >Type of Coupons</label>
+                                    <input type="text" name="name" placeholder="Type here" class="form-control" id="typeOfCoupon" />
+
+
+                                    
+                                    
+                                    <label for="selectCategoty" class="form-label" >Select Category</label>
+                                    <input type="text" name="name" placeholder="Type here" class="form-control" id="selectCategoty" />
+ -->
+
+                                   
+                                </div>
+                                <!-- <div class="mb-4">
+                                    <label for="product_slug" class="form-label">Slug</label>
+                                    <input type="text" placeholder="Type here" class="form-control" id="product_slug" />
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Parent</label>
+                                    <select class="form-select">
+                                        <option>Clothes</option>
+                                        <option>T-Shirts</option>
+                                    </select>
+                                </div> -->
+                                <!-- <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here" name="discription" class="form-control"></textarea>
+                                </div> -->
+                                <div class="d-grid">
+                                    <button class="btn btn-primary" type="submit">Create Banner</button>
+                                </div>
+                            </form>
+
+
+
+                        </div>
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl No</th>
+                                            <th>H1</th>
+                                            <th>H2</th>
+                                            <th>H3</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Offer</th>
+                                            <th class="text-end"><span class="me-5">Image</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% var count=1  %>
+                                        <% banner.forEach(function(item){ %>
+                                        
+                                        <tr>
+                                            <td>
+                                                <%= count++ %>
+                                            </td>
+                                            <td><b>
+                                                <%= item.h1 %>
+                                            </b></td>
+                                            <td>
+                                                <%= item.h2 %>
+                                            </td>
+                                            <td>
+                                                <%= item.h3 %>
+                                            </td>
+                                            <td>
+                                                <%= item.startDate %>
+                                            </td>
+                                            <td>
+                                                <%= item.endDate %>
+                                            </td>
+                                            <td>
+                                                <%= item.offer %>
+                                            </td>
+
+                                            <td>
+                                                <div class="col-lg-10 col-sm-2 col-4 col-action text-end">
+                                                    
+                                                    <!-- <div class="left"> -->
+                                                        <img src="/uploads/<%=item.imageName%>" class="img-sm img-thumbnail" alt="Item">
+                                                    <!-- </div> -->
+                                                   
+                                                </div>
+                                                <br>
+                                                <!-- <div class="dropdown">
+                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#">View detail</a>
+                                                        <a class="dropdown-item" href="#">Edit info</a>
+                                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                    </div>
+                                                </div> dropdown //end -->
+                                            </td>
+                                        </tr>
+                                        <% })  %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+
+
+    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/vendors/select2.min.js"></script>
+    <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="assets/js/main.js" type="text/javascript"></script>
+
+    
+
+
+    <script>
+    // let frm = $('#formAddress');
+    // catform.addEventListener('submit', (e) => {
+    // // e.preventDefault()
+    //      console.log("button pressed")
+    // $.ajax({
+    //     type: 'POST',
+    //     url: frm.attr('action'),
+    //     data: frm.serialize(),
+    //     success:function (data) {
+               
+    //             location.reload();
+    //     },
+    //     error: function (data) {
+    //         alert('An error occurred.');
+    //         console.log(data);
+    //     },
+    // });
+
+
+      
+      
+
+
+
+
+
+
+
+         
+       
+    //  })
+ 
+     </script>
+
+
+
+
+
+
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+</html>

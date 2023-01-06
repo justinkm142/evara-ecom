@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<%- include('../partials/adminHead.ejs') %>
+
+
+
+
+<body>
+   
+    <%- include('../partials/adminNav.ejs') %>
+
+   
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order detail</h2>
+                    <p>Details for Order ID: <%= orderList._id%></p>
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i><%= orderList.date.substring(0, 16)%> <b></b>
+                            </span> <br>
+                            <small class="text-muted">Order ID: <%= orderList._id%></small>
+                        </div>
+                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                            <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
+                                <option>Change status</option>
+                                <option>Awaiting payment</option>
+                                <option>Confirmed</option>
+                                <option>Shipped</option>
+                                <option>Delivered</option>
+                            </select>
+                            <a class="btn btn-primary" href="#">Save</a>
+                            <a class="btn btn-secondary print ms-2" href="#"><i class="icon material-icons md-print"></i></a>
+                        </div>
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap">
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-person"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Customer</h6>
+                                    <p class="mb-1">
+                                        <%= orderList.userInfo.name%> <br><%= orderList.userInfo.email%> <br> +91   <%= orderList.userInfo.phone%>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-local_shipping"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Order info</h6>
+                                    <p class="mb-1">
+                                        Shipping: Fargo express <br> Pay method: card <br> Status: new
+                                    </p>
+                                    <a href="#">Download info</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-place"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Deliver to</h6>
+                                    <p class="mb-1">
+                                        <%= orderList.address.name%> <br><%= orderList.address.address%> <br> <%= orderList.address.city%>
+                                        <br> <%= orderList.address.state%>  - <%= orderList.address.zipCode%>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                    </div> <!-- row // -->
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="30%">Product</th>
+                                            <th width="15%">Unit Price</th>
+                                            <th width="15%">Quantity</th>
+                                            <th width="15%">Total</th>
+                                            <th width="30%" class="text-end">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% let total=0 %>
+                                        <% let i=0 %>
+                                        <% productList.forEach(function(item){ %>
+
+                                            <% total=total+((item.products.quantity)*(item.productInfo.sellingPrice)) %>
+
+                                        <tr>
+                                            <td>
+                                                <a class="itemside" href="#">
+                                                    <div class="left">
+                                                        <img src="/uploads/<%=item.productInfo.image[0]%>" width="40" height="40" class="img-xs" alt="Item">
+                                                    </div>
+                                                    <div class="info"> <%= item.productInfo.name %> </div>
+                                                </a>
+                                            </td>
+                                            <td> ₹ <%= item.productInfo.sellingPrice %> </td>
+                                            <td><%= item.products.quantity %></td>
+                                            <td> ₹ <%=(item.products.quantity)*(item.productInfo.sellingPrice) %></td>
+                                            <td class="text-end"> 
+                                               <% if(item.products.status=="processing"){ %>
+                                                <select id="<%= item.products.productId %>" class="form-select d-inline-block mb-lg-0 mb-15 mw-200" onchange=" updateOrder('<%- item.products.productId %>','<%-i%>','<%- orderList._id%>')">
+                                                    <option>Processing</option>
+                                                    <option>Placed</option>
+                                                    <option>Shipped</option>
+                                                    <option>Delivered</option>
+                                                </select>
+
+                                            <%} %>
+                                            <% if(item.products.status=="Placed"){ %>
+                                                <select id="<%= item.products.productId %>" class="form-select d-inline-block mb-lg-0 mb-15 mw-200" onchange=" updateOrder('<%- item.products.productId %>','<%-i%>','<%- orderList._id%>')">
+                                                    <option>Placed</option>
+                                                    <option>Shipped</option>
+                                                    <option>Delivered</option>
+                                                </select>
+                                            <%} %>
+                                            <% if(item.products.status=="Shipped"){ %>
+                                                <select id="<%= item.products.productId %>" class="form-select d-inline-block mb-lg-0 mb-15 mw-200" onchange=" updateOrder('<%- item.products.productId %>','<%-i%>','<%- orderList._id%>')">
+                                                    
+                                                    <option>Shipped</option>
+                                                    <option>Delivered</option>
+                                                </select>
+                                                <%} %>
+                                            <% if(item.products.status=="Return"){ %>
+                                                <select id="<%= item.products.productId %>" class="form-select d-inline-block mb-lg-0 mb-15 mw-200" onchange=" updateOrder('<%- item.products.productId %>','<%-i%>','<%- orderList._id%>')">
+                                                        
+                                                    <option>Return</option>
+                                                    <option>Refund</option>
+                                                    </select>
+                                                    <%} %>
+                                            <% if(item.products.status=="Delivered"){ %>
+                                                <select id="<%= item.products.productId %>" class="form-select d-inline-block mb-lg-0 mb-15 mw-200" onchange=" updateOrder('<%- item.products.productId %>','<%-i%>','<%- orderList._id%>')">
+                                                    <option>Delivered</option>
+                                                </select>
+                                                <%} %>
+                                            <% if((item.products.status=="Cancel") || (item.products.status=="Refund")){ %>
+                                                <h5><b style="color:rgb(3, 169, 0) ;">completed</b></h5>
+                                                 <!-- <select id="<%= item.products.productId %>" class="form-select d-inline-block mb-lg-0 mb-15 mw-200" onchange=" updateOrder('<%- item.products.productId %>','<%-i%>','<%- orderList._id%>')">
+                                                    <option>Delivered</option>
+                                                </select> -->
+                                                <%} %>
+                                            </td>
+                                        </tr>
+
+                                        
+                                        <% i=i+1 %>
+                                        <% }) %> 
+
+
+                                        
+                                        
+                                        <tr>
+                                            <td colspan="4">
+                                                <article class="float-end">
+                                                    <dl class="dlist">
+                                                        <dt>Subtotal:</dt>
+                                                        <dd>₹ <%-total%></dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Shipping cost:</dt>
+                                                        <dd>₹ 0.00</dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Grand total:</dt>
+                                                        <dd> <b class="h5">₹ <%-total%></b> </dd>
+                                                    </dl>
+                                                   
+                                                </article>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> <!-- table-responsive// -->
+                        </div> <!-- col// -->
+                        <!-- <div class="col-lg-1"></div> -->
+                        <div class="col-lg-3">
+                            <div class="box shadow-sm bg-light">
+                                <h6 class="mb-15">Payment info</h6>
+                                <p>
+                                    <%= orderList.paymentMethod%>
+                                </p>
+                            </div>
+                            <div class="box shadow-sm bg-light">
+                                <h6 class="mb-15">Payment Status</h6>
+                                <p>
+                                    <%= orderList.paymentStatus%>
+                                </p>
+                            </div>
+                            <div class="h-25 pt-4">
+                                <button class="btn btn-primary">Update</button>
+                            </div>
+                        </div> <!-- col// -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+
+        
+
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <div id="snackbar">Order Status Updated</div>
+       
+
+    </main>
+    <script src="/admin/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/js/vendors/select2.min.js"></script>
+    <script src="/admin/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- Main Script -->
+    <script src="/admin/assets/js/main.js" type="text/javascript"></script>
+
+    <script>
+
+function updateOrder(id,selection,orId){
+   
+    let data={
+        productId:id,
+        proSelection:selection,
+        newValue:document.getElementById(id).value,
+        orderId:orId
+    }
+
+    $.ajax({
+        type:"PATCH",
+        url:"/admin/page-orders-detail.html",
+        dataType: "text",
+        data: data,
+        success: function (data) {
+            console.log("JHVBHDSBHDBVJD")
+                console.log(data)
+                var x = document.getElementById("snackbar");
+                x.className = "show";
+                setTimeout(function(){ x.className = x.className.replace("show", ""); }, 2000);
+                location.reload();
+                
+        },
+        error: function (data) {
+            alert('An error occurred.');
+        },
+    });
+    }
+
+    </script>
+
+
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-orders-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:22 GMT -->
+</html>
