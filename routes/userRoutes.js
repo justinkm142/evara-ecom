@@ -21,6 +21,9 @@ const verifyLogin=(request,response,next)=>{
 
 //--------------------- Home Page -------------------------------
 
+// home page re route 
+router.get("/",userController.home_page)
+
 // home page
 router.get("/index.html",userController.home_user)
 
@@ -92,7 +95,7 @@ router.get("/shop-cart.html/delete/:productId",userController.delete_cart)
 router.get("/shop-cart.html",verifyLogin,userController.show_cart)
 
 //check-out
-router.get("/shop-checkout.html",userController.check_out)
+router.get("/shop-checkout.html",verifyLogin,userController.check_out)
 
 
 // place order 
@@ -101,6 +104,8 @@ router.post("/place-order",userController.place_order)
 router.patch("/place-order",userController.confirm_payment)
 
 router.get("/payment_success",userController.payment_success)
+
+router.get("/payment_fail",userController.payment_fail)
 
 
 

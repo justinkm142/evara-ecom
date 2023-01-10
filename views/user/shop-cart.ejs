@@ -83,10 +83,16 @@
 
                                     
                                 </tbody>
+
                             </table>
+                            <% if (cartData.length==0){ %>
+
+                                <h1 style="text-align: center;"> Cart Is Empty</h1>
+
+                           <%  } %>
                         </div>
                         <div class="cart-action text-end">
-                            <a class="btn " href="/index.html"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                            <!-- <a class="btn " href="/index.html"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a> -->
                         </div>
                         <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
                         <div class="row mb-50">
@@ -139,8 +145,12 @@
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <div class="cart-action text-end">
+                                            <a class="btn " href="/index.html"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                                            <a href="/shop-checkout.html" class="btn " id="checkOutBtn"> <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a>
+                                        </div>
                                     </div>
-                                    <a href="/shop-checkout.html" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a>
+                                    <!-- <a href="/shop-checkout.html" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a> -->
                                 </div>
                             </div>
                         </div>
@@ -156,6 +166,11 @@
     <%- include('../partials/userFooter.ejs') %>
 
     <script>
+
+        if (document.getElementById("newCartTotal").innerHTML==0){
+            $("#checkOutBtn").bind('click', false);
+            $("#checkOutBtn").css('background-color', "#cccccc");
+        }
 
         function updateCart(id,factor){
             let oldQty=Number(document.getElementById(id).innerText)

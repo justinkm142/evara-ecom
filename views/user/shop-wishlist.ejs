@@ -44,6 +44,7 @@
                                 </thead>
                                 <tbody>
 
+                                    
 
                                     <% var sum=0; var cartItem=0;          %>
                                     <% cartData.forEach(function(item){ %>
@@ -76,7 +77,13 @@
                                     <%  }) %>
 
                                 </tbody>
+                                
                             </table>
+                            <% if (cartData.length==0){ %>
+
+                                <h1 style="text-align: center;"> Wishlist Is Empty</h1>
+
+                           <%  } %>
                         </div>
                     </div>
                 </div>

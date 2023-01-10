@@ -1,4 +1,5 @@
-// const Routes = require('twilio/lib/rest/Routes');
+//const Routes = require('twilio/lib/rest/Routes');
+const twilio = require('twilio');
 
 const { user } = require("../models/user");
 const { Admin } = require("../models/user");
@@ -24,7 +25,17 @@ let otpError = false;
 let blocked = false;
 
 
+//Home page redirect 
+const home_page=function (request,response){
+    try{
+        response.redirect ("/index.html");
 
+
+    }catch(err){
+        console.log(err)
+
+    }
+}
 
 
 //Home page 
@@ -987,7 +998,7 @@ const place_order = async function (request, response) {
                 },
                 "redirect_urls": {
                     "return_url": "http://localhost:3000/payment_success",
-                    "cancel_url": "http://localhost:3000/payment_cancel"
+                    "cancel_url": "http://localhost:3000/payment_fail"
                 },
                 "transactions": [{
 
@@ -1155,6 +1166,20 @@ const payment_success = async function (request, response) {
     } catch (err) {
         console.log(err)
     }
+
+}
+
+const payment_fail= function(request,response){
+try{
+
+    response.render("./user/page-payment-fail",{loginStatus: request.session.loggedIn,
+        userName: request.session.user, sessionData:request.session,session:request.session});
+
+
+}catch(err){
+   console.log(err) 
+}
+
 
 }
 
@@ -1375,22 +1400,31 @@ const coupon_check= async function (request,response){
 }
 
 const about_page =function (request,response){
+    try{
     response.render("./user/page-about",{
         loginStatus: request.session.loggedIn,
         userName: request.session.user,
         session:request.session})
+    }catch(err){
+        console.log(err)
+    }
 }
 
 
 
 const contact_page =function (request,response){
+    try{
     response.render("./user/page-contact",{
         loginStatus: request.session.loggedIn,
         userName: request.session.user,
         session:request.session})
+    }catch(err){
+        console.log(err)
+    }
 }
 
 const product_list= async function (request,response){
+    try{
     let filter=request.query.filter;
     let sort=request.query.sort;
 
@@ -1470,30 +1504,40 @@ const product_list= async function (request,response){
             sort:sort,
             session: request.session
         })
-    }     
+    }
+}catch(err){
+    console.log(err)
+}     
 }
 
 
 //privacy policy 
 const privacy_policy =function (request,response){
+    try{
     response.render("./user/page-privacy-policy",{
         loginStatus: request.session.loggedIn,
         userName: request.session.user,
         session:request.session})
+    }catch(err){
+        console.log(err)
+    }
 }
 
 //page terms and conditions 
 const page_terms =function (request,response){
+    try{
     response.render("./user/page-terms",{
         loginStatus: request.session.loggedIn,
         userName: request.session.user,
         session:request.session})
+    }catch(err){
+        console.log(err)
+    }
 }
 
 const page_search= async function (request,response){
+    try{
    console.log(request.body.search)
-
-
 //    await Product.createIndex( { name: "text" } )
    let productList=await Product.find( { $text: { $search: request.body.search } } ).exec();
    
@@ -1505,11 +1549,15 @@ const page_search= async function (request,response){
         sort:"search",
         session: request.session
     })
+}catch(err){
+    console.log(err);
+}
 }
 
 
 
 module.exports={
+    home_page,
     login_user,
     send_mobileOTP,
     verify_OTP,
@@ -1544,6 +1592,7 @@ module.exports={
     product_list,
     privacy_policy,
     page_terms,
-    page_search
+    page_search,
+    payment_fail
     
 }

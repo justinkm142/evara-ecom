@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+
+    <%- include('../partials/userHead.ejs') %>
+
+
+
+<body>
+
+    <%- include('../partials/userNav.ejs') %>
+
+
+
+
+
+<main class="main">
+  <div class="page-header breadcrumb-wrap">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/index.html" rel="nofollow">Home</a>
+        <span></span> My account
+        <span></span> Order details
+      </div>
+    </div>
+  </div>
+  
+
+  <section class="mt-50 mb-70">
+    
+   <div style="text-align: center;">
+    <img src="/uploads/IMG-20221213-WA0022.jpg" style="width: 250px;">
+    <h1>Payment Fail</h1>
+   </div>
+  </section>
+  
+ 
+</main>
+
+<%- include('../partials/userFooter.ejs') %>
+
+<script>
+
+setTimeout(function(){ 
+  location.href = '/index.html';
+}, 3000);
+                    
+
+
+  
+</script>
