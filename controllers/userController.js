@@ -11,6 +11,7 @@ const { Payment } = require("../models/payment");
 const { WishList } = require("../models/wishList");
 const { Coupon } = require("../models/coupon");
 const { Banner } = require("../models/banner");
+const { Wallet } = require("../models/wallet");
 const session = require("express-session")
 var mongoose = require('mongoose');
 const paypal = require('paypal-rest-sdk');
@@ -296,12 +297,24 @@ const register_user = function (request, response) {
             phone: phoneNumber,
             password: password,
         });
-        item.save().catch((err) => {
-            console.log(err);
-        }).then((result) => {
+        item.save()
+        .then((result) => {
+            console.log(result)   
             console.log("user added sucessfully")
+            const item = new Wallet({
+                userId: result._id
+            });
+            item.save()
+            .then((result)=>{
+                
+                response.redirect("/index.html");
+
+            })   
         })
-        response.redirect("/index.html");
+        .catch((err) => {
+            console.log(err);
+        })
+        
     } catch (err) {
         console.log(err)
     }
@@ -689,13 +702,14 @@ const user_account = async function (request, response) {
     try {
 
     let orderDetail= await Order.find({ userId: request.session.userId }).sort({ "createdAt" : -1 }).exec();
+    let walletDetails= await Wallet.findOne({userId:request.session.userId})
 
     let userDetail= await user.findOne({'_id':request.session.userId}).exec();
    
 
         response.render("./user/page-account",{loginStatus: request.session.loggedIn,
         userName: request.session.user, sessionData:request.session,
-        orderDetail:orderDetail,userDetail:userDetail,
+        orderDetail:orderDetail,userDetail:userDetail,walletDetails:walletDetails,
         session:request.session})
 
 

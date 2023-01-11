@@ -47,6 +47,36 @@
                 </header> <!-- card-header end// -->
 
 
+                <div class="card-body">
+                    <article class="itemlist">
+                        <div class="row align-items-center">
+                            <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                                <a class="itemside" href="#">
+                                    <div class="left">
+                                        <h6 class="mb-0">Photo</h6>
+                                    </div>
+                                    <div class="info">
+                                        <h6 class="mb-0 ms-5">Name</h6>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-1 col-sm-2 col-4 col-price"> <h6 class="mb-0">MRP</h6> </div>
+                            <div class="col-lg-1 col-sm-2 col-4 col-price"> <h6 class="mb-0">Selling Price</h6> </div>
+                            
+                            <div class="col-lg-2 col-sm-2 col-4 col-status">
+                                <h6 class="mb-0">Status</h6>
+                            </div>
+                            
+                            <div class="col-lg-1 col-sm-2 col-4 col-date">
+                                <h6 class="mb-0">Stock</h6>
+                            </div>
+                            <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                <h6 class="mb-0 mx-3">Action</h6>
+                            </div>
+                        </div> <!-- row .// -->
+     
+                </div> <!-- card-body end// -->
+
                 <% product.forEach(function(item){ %>
 
                 <div class="card-body">
@@ -89,8 +119,41 @@
                 </div> <!-- card-body end// -->
                 <% }) %>
 
+
+
+                <nav aria-label="Page navigation example" style="width: 500px;">
+                    <ul class="pagination">
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                        </a>
+                      </li>
+                      <% let additionaPage=0 %>
+                      <% if(pageLength%10==0){ } else { additionaPage = 1}   %>
+
+                      <% for(let i=1;i<(pageLength/10)+additionaPage;i++){ %>
+                      <li class="page-item"><a class="page-link" href="/admin/page-products-list.html/?page=<%-i%>" style="width:50px;height:40px"><%-i%></a></li>
+                      <!-- <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=2">2</a></li>
+                      <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=3">3</a></li>
+                      <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=4">4</a></li>
+                      <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=5">5</a></li> -->
+                      <% }  %>
+                      <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </nav>
+
+
             </div> <!-- card end// -->
         </section> <!-- content-main end// -->
+
+
+
+
+
         <footer class="main-footer font-xs">
             <div class="row pb-30 pt-15">
                 <div class="col-sm-6">

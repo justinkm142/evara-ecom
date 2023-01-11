@@ -44,6 +44,9 @@
                                         <li class="nav-item">
                                             <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#Wallet" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-bank mr-10"></i>My Wallet</a>
+                                        </li>
                                         <!-- <li class="nav-item">
                                             <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
                                         </li> -->
@@ -108,7 +111,23 @@
                                         </div>
                                     </div>
                                     
+<!-- --------------------------------------------- Wallet  tab-------------- -->
 
+
+
+
+<div class="tab-pane fade" id="Wallet" role="tabpanel" aria-labelledby="orders-tab">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-0">Wallet Balance</h2>
+        </div>
+        <div class="card-body">
+            
+         <h2 class="mb-0"><span>₹  </span><%= walletDetails.balance %></h2>
+        
+        </div>
+    </div>
+</div>
 
 <!-- ------------------------------------------------adress tab--------------------------------- -->
 
@@ -294,7 +313,7 @@
                                             <div class="card-header">
                                                 <h5>Account Details</h5>
                                             </div>
-                                            <div class="card-body">
+                                            <div class="card-body" id="accountDetailsReload">
 
 
                                                <form method="post" name="enq" id="userDetailForm" action="/page-account.html/userUpdate">
@@ -431,7 +450,7 @@ if (document.getElementById("cpassword1").value==document.getElementById("npassw
         url: userfrm.attr('action'),
         data: userfrm.serialize(),
         success: function (data) {
-               
+              // $('#account-detail').load(document.URL+' #account-detail');
                 location.reload();
         },
         error: function (data) {

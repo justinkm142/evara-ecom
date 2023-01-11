@@ -8,6 +8,7 @@ const session = require("express-session");
 const { Payment } = require("../models/payment");
 const { Coupon } = require("../models/coupon");
 const { Banner } = require("../models/banner");
+const { Wallet } = require("../models/wallet");
 var mongoose = require('mongoose');
 
 
@@ -492,15 +493,24 @@ response.redirect("/admin/page-products-list.html")
 
 //product page view 
 
-const view_product = function (request, response) {
+const view_product = async function (request, response) {
     try {
-    Product.find({})
-        .then((result) => {
-            response.render("./admin/page-products-list", { product: result });
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+
+        const pageNum = request.query.page;
+        
+        const perPage = 10;
+
+   let result = await  Product?.find({})
+    .sort({createdAt: -1})
+    .skip((pageNum-1)*perPage)
+    .limit(perPage).exec()
+
+   let  pageLength= await Product?.find({}).count().exec()
+    console.log(pageLength)
+    response.render("./admin/page-products-list", { product: result,pageLength:pageLength });
+
+
+        
     } catch (err) {
         console.log(err)
     }
@@ -604,13 +614,24 @@ const order_page = async function (request, response) {
             { $limit : perPage }
 
            ])
+        let pageLength=  await Order.aggregate([
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "userInfo"
+                }
+            },
+            {$unwind: "$userInfo"}
+           ])
            
-           
-
+           pageLength=pageLength.length
+           console.log(pageLength)
           
             
 
-        response.render("./admin/page-orders-1",{orderList:orderList});
+        response.render("./admin/page-orders-1",{orderList:orderList,pageLength:pageLength});
 
     } catch (err) {
         console.log(err)
@@ -733,15 +754,29 @@ const order_update = async function (request, response) {
         let oldArray=array[0].products;
         let oldProData=array[0].products[selection];
         oldProData.status=newValue;
+        
+        
+
+        console.log(newValue)
+        
 
         oldArray.splice(selection,1,oldProData);
         await Order.findByIdAndUpdate(orderId, { $set: {products:oldArray}})
-        .then((result) => {
-            console.log("order updated")
-           
-        }).catch((err) => {
-            console.log(err)
-        })
+
+        if(newValue=="Cancel" && array[0].paymentStatus=="success"){
+            let existingBalace= await Wallet.findOne({userId:request.session.userId})
+            let productPrice= await Product.findById(productId);
+            let refund =array[0].products[selection].quantity*productPrice.sellingPrice
+
+            await Wallet.updateOne({userId:request.session.userId},{$set:{balance:refund+existingBalace.balance}})
+        }
+        if(newValue=="Refund"){
+            let existingBalace= await Wallet.findOne({userId:array[0].userId})
+            let productPrice= await Product.findById(productId);
+            let refund =array[0].products[selection].quantity*productPrice.sellingPrice
+
+            await Wallet.updateOne({userId:array[0].userId},{$set:{balance:refund+existingBalace.balance}})
+        }
 
         response.json({ name: "justin" })
         

@@ -158,7 +158,7 @@ router.patch("/page-account.html/new_address",userController.edit_address)
 router.delete("/page-account.html/new_address",userController.delete_address)
 
 //user order detail view page 
-router.get("/page-account.html/order-details/:orderId",userController.order_details)
+router.get("/page-account.html/order-details/:orderId",verifyLogin,userController.order_details)
 
 
 

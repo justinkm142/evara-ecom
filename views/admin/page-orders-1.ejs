@@ -91,18 +91,23 @@
 
 
 
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation example" style="width: 500px;">
                         <ul class="pagination">
                           <li class="page-item">
                             <a class="page-link" href="#" aria-label="Previous">
                               <span aria-hidden="true">&laquo;</span>
                             </a>
                           </li>
-                          <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=1">1</a></li>
-                          <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=2">2</a></li>
+                          <% let additionaPage=0 %>
+                          <% if(pageLength%10==0){ } else { additionaPage = 1}   %>
+
+                          <% for(let i=1;i<(pageLength/10)+additionaPage;i++){ %>
+                          <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=<%-i%>" style="width:50px;height:40px"><%-i%></a></li>
+                          <!-- <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=2">2</a></li>
                           <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=3">3</a></li>
                           <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=4">4</a></li>
-                          <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=5">5</a></li>
+                          <li class="page-item"><a class="page-link" href="/admin/page-orders-1.html/?page=5">5</a></li> -->
+                          <% }  %>
                           <li class="page-item">
                             <a class="page-link" href="#" aria-label="Next">
                               <span aria-hidden="true">&raquo;</span>
