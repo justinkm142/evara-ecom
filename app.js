@@ -29,22 +29,16 @@ app.use((request,response)=>{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.listen(port, function(){
     console.log("port is working in port 3000")
 })
 
+
+app.listen(3001, function(){
+    console.log("port is working in port 3001")
+})
+
+
+app.listen(3002, function(){
+    console.log("port is working in port 3002")
+})
