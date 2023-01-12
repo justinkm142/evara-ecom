@@ -156,30 +156,30 @@
 
 // OTP Login form Validation 
 
-    otpGenerateForm.addEventListener('submit', (e) => {
-        document.getElementById("phoneError").innerHTML="";
-        // document.getElementById("otpError").innerHTML="";
-      let messages = [];
+    // otpGenerateForm.addEventListener('submit', (e) => {
+    //     document.getElementById("phoneError").innerHTML="";
+    //     // document.getElementById("otpError").innerHTML="";
+    //   let messages = [];
 
-      let userPhoneNumber=document.getElementById("userPhoneNumber")
+    //   let userPhoneNumber=document.getElementById("userPhoneNumber")
 
-      if (userPhoneNumber.value === '' || userPhoneNumber.value == null) {
-        document.getElementById("phoneError").innerHTML="Phone Number is required";
-        messages.push('phone number is required');
-      }
-      else if (userPhoneNumber.value.length !=10){
-        document.getElementById("phoneError").innerHTML="Enter 10 digit phone number ";
-        messages.push('Enter 10 digit phone number');
-      }
-      else if (!((userPhoneNumber.value/userPhoneNumber.value)==1)){
-        document.getElementById("phoneError").innerHTML="Enter number only";
-        messages.push('Enter number only');
-      }
+    //   if (userPhoneNumber.value === '' || userPhoneNumber.value == null) {
+    //     document.getElementById("phoneError").innerHTML="Phone Number is required";
+    //     messages.push('phone number is required');
+    //   }
+    //   else if (userPhoneNumber.value.length !=10){
+    //     document.getElementById("phoneError").innerHTML="Enter 10 digit phone number ";
+    //     messages.push('Enter 10 digit phone number');
+    //   }
+    //   else if (!((userPhoneNumber.value/userPhoneNumber.value)==1)){
+    //     document.getElementById("phoneError").innerHTML="Enter number only";
+    //     messages.push('Enter number only');
+    //   }
 
-     if (messages.length > 0) {
-        e.preventDefault()
-      }
-    })
+    //  if (messages.length > 0) {
+    //     e.preventDefault()
+    //   }
+    // })
 
 // OTP submission form Validation 
 
