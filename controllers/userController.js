@@ -284,7 +284,7 @@ const verify_OTP = function (request, response) {
 
 
 // add new user 
-const register_user = function (request, response) {
+const register_user = async function (request, response) {
     try {
         let name = request.body.name;
         let email = request.body.email;
@@ -297,24 +297,22 @@ const register_user = function (request, response) {
             phone: phoneNumber,
             password: password,
         });
-        item.save()
-        .then((result) => {
-            console.log(result)   
-            console.log("user added sucessfully")
-            const item = new Wallet({
-                userId: result._id
-            });
-            item.save()
-            .then((result)=>{
-                
-                response.redirect("/index.html");
+        let user2=await item.save();
+        console.log(user2)
+        const item1 = new Wallet({
+            userId: user2._id.toString()
+        });
+        await item1.save();
 
-            })   
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-        
+        request.session.loggedIn=true;
+        request.session.user= name;
+        request.session.cartNo=0;
+        request.session.wishNo=0;
+        request.session.userId=user2._id.toString();
+
+
+        response.redirect("/index.html");
+
     } catch (err) {
         console.log(err)
     }
