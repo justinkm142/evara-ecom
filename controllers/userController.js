@@ -103,7 +103,11 @@ const login_user = async function (request, response) {
             error = true;
             response.render("./user/page-login-register", {
                 loginStatus: request.session.loggedIn,
-                userName: request.session.user, loginError: error, phoneError: phoneError, otpError: otpError, blocked: userData[0].userBlocked,
+                userName: request.session.user,
+                loginError: error,
+                phoneError: phoneError,
+                otpError: otpError, 
+                blocked: userData[0].userBlocked,
                 session:request.session
             });
         } else {
@@ -113,7 +117,8 @@ const login_user = async function (request, response) {
                     blocked = true;
                     response.render("./user/page-login-register", {
                         loginStatus: request.session.loggedIn,
-                        userName: request.session.user, loginError: error, phoneError: phoneError, otpError: otpError, blocked: userData[0].userBlocked,
+                        userName: request.session.user, loginError: error, 
+                        phoneError: phoneError, otpError: otpError, blocked: userData[0].userBlocked,
                         session:request.session
                     });
                 } else {
@@ -298,11 +303,25 @@ const register_user = async function (request, response) {
             password: password,
         });
         let user2=await item.save();
-        console.log(user2)
+
         const item1 = new Wallet({
             userId: user2._id.toString()
         });
         await item1.save();
+
+        const item2 = new Cart({
+            userId: user2._id.toString(),
+            products:[]
+        });
+        await item2.save()
+
+        const item3 = new WishList({
+            userId: user2._id.toString(),
+            products:[]
+        });
+        await item3.save()
+
+
 
         request.session.loggedIn=true;
         request.session.user= name;
@@ -391,9 +410,10 @@ const add_cart = async function (request, response) {
             })
 
         } else {
-            let productFoundInCart = await Cart.exists({ 'products.productId': productId });
+            let productFoundInCart = await Cart.find({$and: [{'products.productId': productId},{userId:request.session.userId}] }).exec();
             console.log("product available in cart check output"+productFoundInCart)
-            if (!productFoundInCart) {
+
+            if (productFoundInCart.length==0) {
                 console.log("product not found in cart")
                 let newProduct = {
                     productId: productId,
@@ -406,7 +426,7 @@ const add_cart = async function (request, response) {
 
             } else {
                 console.log("product found in cart")
-                await Cart.updateOne({ 'products.productId': productId, userId: request.session.userId }, { $inc: { 'products.$.quantity': +1 } })
+                await Cart.updateOne({ 'products.productId': productId, userId: request.session.userId }, { $inc: { 'products.$.quantity': +1 } }).exec();
                 console.log("product++ cart" + productId)
             }
             request.session.cartNo=request.session.cartNo+1;
@@ -535,9 +555,12 @@ const add_wishList = async function (request, response) {
             })
 
         } else {
-            let productFoundInCart = await WishList.exists({ 'products.productId': productId });
-            console.log("product available in cart check output"+productFoundInCart)
-            if (!productFoundInCart) {
+           // let productFoundInCart = await WishList.exists({ 'products.productId': productId });
+
+           let productFoundInCart = await WishList.find({$and: [{'products.productId': productId},{userId:request.session.userId}] }).exec();
+           console.log("product available in cart check output"+productFoundInCart)
+
+           if (productFoundInCart.length==0) {
                 console.log("product not found in cart")
                 let newProduct = {
                     productId: productId,

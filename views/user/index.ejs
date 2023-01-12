@@ -476,7 +476,7 @@
             x.className = "show";
             setTimeout(function(){ x.className = x.className.replace("show", ""); }, 2000);
             document.getElementById("cartItem001").innerText= Number(document.getElementById("cartItem001").innerText)+1;
-            
+            document.getElementById("cartItem002").innerText= Number(document.getElementById("cartItem002").innerText)+1;
             }
             xhr.send()
             '<% } else {  %>'
@@ -505,7 +505,8 @@ function addToWishList(url){
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 2000);
     document.getElementById("wishItem001").innerText= Number(document.getElementById("wishItem001").innerText)+1;
-    
+    document.getElementById("wishItem002").innerText= Number(document.getElementById("wishItem002").innerText)+1;
+
     }
     xhr.send()
     '<% } else {  %>'
