@@ -4,7 +4,7 @@ const Schema= mongoose.Schema;
 // user data base 
 //mongoose.connect("mongodb://127.0.0.1:27017/evaraDataDB").catch((err)=>{ console.log(err);console.log("Database connection error")})
 
-mongoose.connect("mongodb+srv://admin-evara:JUSKM1111a@evara-ecom.il0m4vi.mongodb.net/evaraDataDB").catch((err)=>{ console.log(err);console.log("Database connection error")})
+mongoose.connect("mongodb+srv://admin-evara:"+process.env.mongo_pass+"@evara-ecom.il0m4vi.mongodb.net/evaraDataDB").catch((err)=>{ console.log(err);console.log("Database connection error")})
 
 
 
