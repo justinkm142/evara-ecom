@@ -6,7 +6,7 @@
         $('body').delay(450).css({
             'overflow': 'visible'
         });
-        $("#onloadModal").modal('show');
+        //$("#onloadModal").modal('show');
     });
     /*-----------------
         Menu Stick

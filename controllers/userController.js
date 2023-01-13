@@ -626,9 +626,16 @@ const wishAdd_cart = async function (request, response) {
             })
 
         } else {
-            let productFoundInCart = await Cart.exists({ 'products.productId': productId });
+            // xxxx
+            // let productFoundInCart = await Cart.exists({ 'products.productId': productId });
+            // console.log("product available in cart check output"+productFoundInCart)
+            // if (!productFoundInCart) {
+            // xxxxx
+
+            let productFoundInCart = await Cart.find({$and: [{'products.productId': productId},{userId:request.session.userId}] }).exec();
             console.log("product available in cart check output"+productFoundInCart)
-            if (!productFoundInCart) {
+ 
+            if (productFoundInCart.length==0) {
                 console.log("product not found in cart")
                 let newProduct = {
                     productId: productId,
